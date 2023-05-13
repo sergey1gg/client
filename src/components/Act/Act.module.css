@@ -1,0 +1,42 @@
+.room-list {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+  
+  .mainInput{
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    margin-bottom: 20px
+  }
+  .plusBtn{
+    border-radius: 50%;
+    border: 1px solid black;
+    width: 25px;
+    height: 25px;
+    background: white;
+  }
+  .btnForm{
+
+  }
+  .addButton {
+    padding: 10px;
+    border: none;
+    background-color: #28a745;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  label {
+    display: block;
+    margin-top: 10px;
+  }
+ 
+  .selectedRoom{
+    color: #dc3545;
+  }

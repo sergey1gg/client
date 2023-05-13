@@ -1,0 +1,61 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .actTable {
+    width: 100%;
+    margin-top: 20px;
+    text-align: center;
+    border-collapse: collapse;
+  }
+  
+  .actTable th,
+  .actTable td {
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+  
+  .actTable th {
+    background-color: #F6D55C;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  form {
+    background-color: #F6D55C;
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 20px;
+  }
+  
+  form h2 {
+    margin-top: 0;
+  }
+  
+  form label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .inputUser {
+    display: block;
+    width: 100%;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+  }
+  
+  form input[type="checkbox"] {
+    margin-right: 10px;
+  }
+
+  .btn{
+    padding: 10px;
+    border: none;
+    background-color: #28a745;
+    color: #fff;
+    cursor: pointer;
+  }
