@@ -1,18 +1,13 @@
 import React, { useState } from 'react';
-import s from "./Act.module.css"
+import s from "../Act/Act.module.css"
 import { InputMany } from '../common/InputMany';
 import { useDispatch, useSelector } from 'react-redux';
-import {  deleteRoom, editRoom } from '../../actions/room-api';
 import { setRooms } from '../../reducers/actReducer';
 import {useLocation, useNavigate} from 'react-router-dom'
-import { addElement, deleteElement, editElement } from '../../actions/element-api';
-import { Otdelka } from './Otdelka';
-import { InputElements } from '../common/InputElements';
-import { DefectsWithOut } from '../newpages/DefectsWithOut';
-export const Elements=({fullrooms, actId, selectedRoom, selectedRoomName})=>{
-    const rooms=  fullrooms[selectedRoom].items.map(item => item.name);
 
-    const [pressed,setPressed]=useState('')
+import { addDefect, deleteDefect, editDefect } from '../../actions/defects-api';
+export const DefectsWithOut=({fullrooms, actId, selectedRoom,selectedElement,selectedRoomName})=>{
+    const rooms=  fullrooms[selectedRoom]?.items[selectedElement]?.defects?.map(item => item.name);
 
     const location =useLocation()
     const navigate=useNavigate()
@@ -25,12 +20,12 @@ export const Elements=({fullrooms, actId, selectedRoom, selectedRoomName})=>{
     const [roomButtons, setRoomButtons] = useState({});
     const [showSett, setShowSett] = useState(false);
 
-    const [selectedElement, setSelectedRoom] = useState(null);
+    const [selectedDefect, setSelectedRoom] = useState(null);
     const [counter, setCounter] = useState(0);
+
     const [roomName,setRoomName]=useState("")
 
     const directory=useSelector(state=>state.act.directory)
-    console.log(rooms)
     const handleAddRoom = (event) => {
       event.preventDefault();
       const newRooms = [];
@@ -39,12 +34,11 @@ export const Elements=({fullrooms, actId, selectedRoom, selectedRoomName})=>{
           newRooms.push(name);
         }
       });
-      dispatch(addElement(actId, selectedRoom, newRooms))
+      //dispatch(addDefect(actId, selectedRoom, selectedElement,selectedOtdelka, newRooms))
       setShowAddRoom(false);
       setRoomInputs([{ name: '', count: 1 }]);
       setSelectedRoom(null);
       setRoomName("")
-      setPressed("")
     };
   
     const handleRoomInputNameChange = (event, index) => {
@@ -76,7 +70,7 @@ export const Elements=({fullrooms, actId, selectedRoom, selectedRoomName})=>{
     const handleRenameRoom = (index) => {
       const newRooms = [...rooms];
       newRooms[index] = editingRoomName;
-      dispatch(editElement(actId,selectedRoom,index,editingRoomName))
+      //dispatch(editDefect(actId,selectedRoom,selectedElement,selectedOtdelka,index,editingRoomName))
       setEditingRoomIndex(-1);
     };
   
@@ -88,9 +82,9 @@ export const Elements=({fullrooms, actId, selectedRoom, selectedRoomName})=>{
   const handleDeleteRoom = (index) => {
     const newRooms = [...rooms];
     newRooms.splice(index, 1);
-    dispatch(deleteElement(actId,selectedRoom,index))
+    //dispatch(deleteDefect(actId,selectedRoom,selectedElement,selectedOtdelka,index))
     setSelectedRoom(null);
-    setRoomName("")
+        setRoomName("")
   };
   
   const handleCopyRoom = (index) => {
@@ -98,7 +92,7 @@ export const Elements=({fullrooms, actId, selectedRoom, selectedRoomName})=>{
     const copyRoom = { ...newRooms[index] };
     copyRoom.name += ' - Копия';
     newRooms.splice(index + 1, 0, copyRoom);
-    dispatch(setRooms(newRooms));
+    //dispatch(setRooms(newRooms));
     setSelectedRoom(null);
     setRoomName("")
   };
@@ -108,7 +102,6 @@ export const Elements=({fullrooms, actId, selectedRoom, selectedRoomName})=>{
     setShowSett(!showSett);
     setSelectedRoom(null)
     setRoomName("")
-    setPressed("")
     }
   };
   ;
@@ -117,20 +110,21 @@ export const Elements=({fullrooms, actId, selectedRoom, selectedRoomName})=>{
   const handleSelectRoom=(index,name)=>{
     setSelectedRoom(index);
     setRoomName(name)
-    setPressed("")
   }
 
-
+  if (!rooms) {
+    return null; // Если rooms равно undefined, скрываем компоненту
+  }
     return (
       <>
         <div className={s['room-list']}>
-          <h3 onClick={handleToggleShowButtons} style={{cursor: 'pointer'}}>Список элементов:</h3>
+          <h3 onClick={handleToggleShowButtons} style={{cursor: 'pointer'}}>Наименования замечания:</h3>
           <div style={{ display: 'flex' }}>
           {rooms && rooms.map((room, index) => (
           <div
             key={index}
             style={{ marginLeft: '10px', cursor:"pointer"}}
-            className={selectedElement === index ? `${s.selectedRoom}` : ''}
+            className={selectedDefect === index ? `${s.selectedRoom}` : ''}
             onClick={()=> handleSelectRoom(index,room)}
           >
             <h4>{room}</h4>
@@ -145,31 +139,20 @@ export const Elements=({fullrooms, actId, selectedRoom, selectedRoomName})=>{
     onEditingRoomNameChange={(value) => setEditingRoomName(value)}/>):null}
         {showAddRoom ? (
           <div>
-            <InputElements handleAddRoom={handleAddRoom} handleRoomInputNameChange={handleRoomInputNameChange}
+            <InputMany handleAddRoom={handleAddRoom} handleRoomInputNameChange={handleRoomInputNameChange}
             handleRoomCountDecrement={handleRoomCountDecrement} handleRoomCountIncrement={handleRoomCountIncrement}
             setRoomInputs={setRoomInputs} setShowAddRoom={setShowAddRoom} roomInputs={roomInputs}
-            directory={directory.rooms} selectedRoomName={selectedRoomName}/>
+            directory={directory.otdelka} selectedRoomName={selectedRoomName}/>
             
           </div>
           
         ) : (
           
           <button className={s.addButton} onClick={() => setShowAddRoom(true)}>
-            Добавить элемент
+            Добавить замечание
           </button>
         )}
-{selectedElement !== null && pressed === "otdelka" ? (
-  <Otdelka fullrooms={fullrooms} selectedRoom={selectedRoom} actId={actId} selectedElement={selectedElement} selectedRoomName={roomName} />
-) : selectedElement !== null && pressed === "defects" ? (
-  <DefectsWithOut fullrooms={fullrooms} selectedRoom={selectedRoom} actId={actId} selectedElement={selectedElement} selectedRoomName={roomName}/>
-) : (
-  selectedElement !== null && (
-    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
-      <button className={s.addButton} onClick={() => setPressed("otdelka")}>Добавить отделку</button>
-      <button className={s.addButton} onClick={() => setPressed("defects")}>Добавить дефекты</button>
-    </div>
-  )
-)}
+      
       </>
     );
   }
@@ -184,7 +167,7 @@ export const Elements=({fullrooms, actId, selectedRoom, selectedRoomName})=>{
         [index]: !prevState[index],
       }));
     };
-  
+
     return (
       <>
         {showButtons && (

@@ -1,1 +1,1 @@
-export const SERVER_IP = 'http://45.146.167.36:5000';
+export const SERVER_IP = 'http://localhost:5000';

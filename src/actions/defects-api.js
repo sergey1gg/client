@@ -39,3 +39,16 @@ export const editDefect=(actId,selectedRoom,elementIndex,otdelkaIndex,defectInde
         }
 }
 }
+
+export const addNewDefect=(actId,roomIndex,elementIndex,name)=>{
+    return async dispatch =>{
+        try{                                 
+            const response =await axios.post(`${SERVER_IP}/api/defect/setnewdefect/${actId}/${roomIndex}/${elementIndex}`,{name})
+            dispatch(setRooms(response.data));
+            return response.data
+        }
+        catch(e){
+            console.log(e.response.data.message)
+        }
+    }
+}
